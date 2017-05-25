@@ -31,77 +31,52 @@ export default class Trie {
     return this.wordCount;
   }
 
-
-
   suggest(input) {
     if (!input) {
       return 'please enter some letters';
     }
 
-    let currentNode = this.root;
+    let currentNode;
     let inputValue = [...input.toLowerCase()]
-    //console.log("inputValue " + typeof(inputValue));
-    // let nodeLetters = [];
     let finalArray = []
 
     // find base node
-    let newCurrentNode = this.findNode(inputValue, currentNode)
-    // console.log(newCurrentNode);
+    currentNode = this.findNode(inputValue, this.root)
 
     // find children words
-    this.findChildrenWords(input, newCurrentNode)
+    return this.findChildrenWords(input, currentNode, finalArray)
 
-    //return finalArray
   }
 
-  findChildrenWords(inputValue, currentNode, suggestedArray = []) {
-    // console.log("inputValue" + inputValue);
-    // console.log("currentNode", currentNode);
+  findChildrenWords(inputValue, currentNode, finalArray) {
 
     let newWord = inputValue;
     let keys = Object.keys(currentNode.children);
 
     keys.forEach((element)  => {
-      // console.log("element " + element);
-      // console.log(currentNode);
 
-      newWord += currentNode.children[element].letter
-      // console.log("newWord" + newWord);
+      let completeWord = newWord + currentNode.children[element].letter
 
       if (currentNode.children[element].isCompleteWord === true) {
-        suggestedArray.push(newWord)
+        finalArray.push(completeWord)
       }
 
-      if (currentNode.children[element]) {
-        // console.log("Im running");
-        currentNode = currentNode.children[element]
-        this.findChildrenWords(newWord, currentNode, suggestedArray)
+      if (currentNode.children) {
+        this.findChildrenWords(completeWord, currentNode.children[element], finalArray)
       }
-
     })
-    // console.log("____________________");
-    // console.log(currentNode);
-    // console.log(suggestedArray);
-    // console.log("____________________");
-    return suggestedArray
+    return finalArray;
   }
 
   findNode(inputValue, currentNode) {
-    // console.log("currentNode " + currentNode);
-    // console.log("inputValue " + inputValue);
 
     inputValue.forEach((element) => {
-      // console.log("findnode" + element);
       if (currentNode.children[element]) {
-        // console.log("it Exists");
         currentNode = currentNode.children[element];
-
       }
     })
     return currentNode
   }
-
-
 
   populate(array) {
     for (var i = 0; i < array.length; i++) {

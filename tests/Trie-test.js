@@ -41,8 +41,11 @@ describe ('Insert', () => {
 
     expect(trie.root.letter).to.equal( null )
     expect(trie.root.children.h.letter).to.equal('h')
-    expect(trie.root.children.h.children.i.letter).to.equal('i')
-    expect(trie.root.children.h.children.i.children.m.letter).to.equal('m')
+    expect(trie.root.children.h
+                    .children.i.letter).to.equal('i')
+    expect(trie.root.children.h
+                    .children.i
+                    .children.m.letter).to.equal('m')
   })
 })
 
@@ -106,7 +109,12 @@ describe ('suggest', () => {
 
     trie.insert('catcher')
 
-    expect(trie.suggest('ca')).to.deep.equal([ 'catcher' ])
+    trie.suggest('ca')
+
+    let passedNode = trie.root.children.c
+                              .children.a
+
+    expect(trie.findChildrenWords('ca', passedNode, [])).to.deep.equal([ 'catcher' ])
   })
 
   it('should return array of words based on partial user input', () => {
@@ -144,7 +152,7 @@ describe ('Populate', () => {
     trie = new Trie();
   })
 
-  it.skip('should populate a dictionary of words', () => {
+  it('should populate a dictionary of words', () => {
     const text = "/usr/share/dict/words"
     let dictionary = fs.readFileSync(text).toString().trim().split('\n')
 
@@ -164,19 +172,15 @@ describe ('Select', () => {
 
   it('Should select a word from the suggest array and then return an array with the selected word first if the same suggest is called', () => {
 
-    // trie.insert('cat');
-    // trie.insert('catch');
-    // trie.insert('catcher');
-    // trie.insert('cab');
+    trie.insert('cat');
+    trie.insert('catch');
+    trie.insert('catcher');
+    trie.insert('cab');
 
-    // expect(trie.suggest('ca')).to.deep.equal(['cat', 'catch', 'catcher', 'cab'])
-
-    let arrayExample = ['cat', 'catch', 'catcher', 'cab']
+    expect(trie.suggest('ca')).to.deep.equal(['cat', 'catch', 'catcher', 'cab'])
 
     trie.select('catcher');
 
-    expect(arrayExample).to.deep.equal(['catcher', 'cat', 'catch', 'cab'])
-
-    // expect(trie.suggest('ca')).to.deep.equal(['catcher', 'cat', 'catch', 'cab'])
+    expect(trie.suggest('ca')).to.deep.equal(['catcher', 'cat', 'catch', 'cab'])
   })
 })

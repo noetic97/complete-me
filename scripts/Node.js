@@ -3,6 +3,6 @@ export default class Node {
     this.letter = letter;
     this.children = children;
     this.isCompleteWord = isCompleteWord;
-    this.selected = 0
+    this.selected = 0;
   }
 }
