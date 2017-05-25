@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register tests"
+    "test": "mocha --timeout 4000 --compilers js:babel-core/register tests"
   },
   "keywords": [],
   "author": "",

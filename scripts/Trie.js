@@ -36,29 +36,31 @@ export default class Trie {
       return 'please enter some letters';
     }
 
-    let currentNode;
-    let inputValue = [...input.toLowerCase()]
-    let finalArray = []
-
-    // find base node
-    currentNode = this.findNode(inputValue, this.root)
+    let inputValue = [...input.toLowerCase()];
+    let finalArray = [];
+    let currentNode = this.findNode(inputValue, this.root); //find base node
 
     // find children words
-    return this.findChildrenWords(input, currentNode, finalArray)
 
+    this.findChildrenWords(input, currentNode, finalArray)
+
+    return finalArray.sort(function (a, b) {
+      return b.frequency - a.frequency
+    }).reduce((finalArray, obj) => {
+      finalArray.push(obj.word)
+      return finalArray
+    }, []);
   }
 
   findChildrenWords(inputValue, currentNode, finalArray) {
-
     let newWord = inputValue;
     let keys = Object.keys(currentNode.children);
 
     keys.forEach((element)  => {
-
-      let completeWord = newWord + currentNode.children[element].letter
+      let completeWord = newWord + element;
 
       if (currentNode.children[element].isCompleteWord === true) {
-        finalArray.push(completeWord)
+        finalArray.push({word: completeWord, frequency: currentNode.children[element].frequency})
       }
 
       if (currentNode.children) {
@@ -69,26 +71,28 @@ export default class Trie {
   }
 
   findNode(inputValue, currentNode) {
-
     inputValue.forEach((element) => {
       if (currentNode.children[element]) {
         currentNode = currentNode.children[element];
       }
     })
-    return currentNode
+    return currentNode;
   }
 
   populate(array) {
     for (var i = 0; i < array.length; i++) {
       this.insert(array[i])
     }
-    // console.log(this.wordCount);
   }
 
   select(string) {
-    let selectedWord = this.suggest(string);
+    let arrayedString = [...string];
+    let currentNode = this.root;
+    let node = this.findNode(arrayedString, currentNode);
 
+    if (node.isCompleteWord) {
+      node.frequency++
+    }
+    return node;
   }
-
-
 }
