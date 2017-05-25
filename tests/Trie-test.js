@@ -94,43 +94,49 @@ describe ('suggest', () => {
     trie = new Trie();
   })
 
-  it('should return a phrase that asks the user to enter a value', () => {
+  it('should return a phrase that asks the user to enter a value if no value is passed in', () => {
 
     trie.insert('cat');
     trie.insert('catch');
 
     expect(trie.suggest()).to.equal('please enter some letters');
-
   })
 
-  it.skip('should return all words that contain user input', () =>{
+  it('should have a helper function that returns a full word based on partial user input', () => {
+
+    trie.insert('catcher')
+
+    expect(trie.suggest('ca')).to.deep.equal([ 'catcher' ])
+  })
+
+  it('should return array of words based on partial user input', () => {
+
+    trie.insert('cat')
+    trie.insert('catch')
+    trie.insert('catcher')
+
+    expect(trie.suggest('ca')).to.deep.equal([ 'cat', 'catch', 'catcher' ])
+  })
+
+  it('should return all words that contain user input at the beginning of the word', () =>{
 
     trie.insert('cat');
     trie.insert('catch');
     trie.insert('car');
+    trie.insert('cart');
     trie.insert('carted');
     trie.insert('bird');
 
-    expect(trie.suggest('ca')).to.deep.equal(['cat', 'catch', 'car', 'carted']);
+    expect(trie.suggest('ca')).to.deep.equal(['cat', 'catch', 'car', 'cart', 'carted']);
 
-    expect(trie.suggest('car')).to.deep.equal(['car', 'carted']);
+    expect(trie.suggest('car')).to.deep.equal(['cart', 'carted']);
 
     expect(trie.suggest('bi')).to.deep.equal(['bird']);
-
-  })
-
-  it('placeholder', () => {
-    trie.insert('cat');
-    trie.insert('catch');
-    trie.insert('catcher')
-
-    trie.suggest('catch')
-
-    expect()
   })
 })
 
-describe ('populate', () => {
+
+describe ('Populate', () => {
 
   let trie;
 
@@ -145,6 +151,32 @@ describe ('populate', () => {
     trie.populate(dictionary)
 
     expect(trie.wordCount).to.equal(235886);
-    // expect(trie.count()).to.equal(235886);
+    expect(trie.count()).to.equal(235886);
+  })
+})
+
+describe ('Select', () => {
+  let trie;
+
+  beforeEach( () => {
+    trie = new Trie();
+  })
+
+  it('Should select a word from the suggest array and then return an array with the selected word first if the same suggest is called', () => {
+
+    // trie.insert('cat');
+    // trie.insert('catch');
+    // trie.insert('catcher');
+    // trie.insert('cab');
+
+    // expect(trie.suggest('ca')).to.deep.equal(['cat', 'catch', 'catcher', 'cab'])
+
+    let arrayExample = ['cat', 'catch', 'catcher', 'cab']
+
+    trie.select('catcher');
+
+    expect(arrayExample).to.deep.equal(['catcher', 'cat', 'catch', 'cab'])
+
+    // expect(trie.suggest('ca')).to.deep.equal(['catcher', 'cat', 'catch', 'cab'])
   })
 })
