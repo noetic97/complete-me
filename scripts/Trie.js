@@ -81,12 +81,12 @@ export default class Trie {
   select(string) {
     let arrayedString = [...string];
     let currentNode = this.root;
-    let node = this.findNode(arrayedString, currentNode);
+    let newNode = this.findNode(arrayedString, currentNode);
 
-    if (node.isCompleteWord) {
-      node.frequency++
+    if (newNode.isCompleteWord) {
+      newNode.frequency++
     }
-    return node;
+    return newNode;
   }
 
   populate(array) {
