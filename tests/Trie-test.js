@@ -151,7 +151,7 @@ describe ('Populate', () => {
     trie = new Trie();
   })
 
-  it.skip('should populate a dictionary of words', () => {
+  it('should populate a dictionary of words', () => {
     const text = "/usr/share/dict/words"
     let dictionary = fs.readFileSync(text).toString().trim().split('\n')
 

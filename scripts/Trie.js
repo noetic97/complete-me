@@ -41,7 +41,6 @@ export default class Trie {
     let currentNode = this.findNode(inputValue, this.root); //find base node
 
     // find children words
-
     this.findChildrenWords(input, currentNode, finalArray)
 
     return finalArray.sort(function (a, b) {
@@ -79,12 +78,6 @@ export default class Trie {
     return currentNode;
   }
 
-  populate(array) {
-    for (var i = 0; i < array.length; i++) {
-      this.insert(array[i])
-    }
-  }
-
   select(string) {
     let arrayedString = [...string];
     let currentNode = this.root;
@@ -94,5 +87,11 @@ export default class Trie {
       node.frequency++
     }
     return node;
+  }
+
+  populate(array) {
+    for (var i = 0; i < array.length; i++) {
+      this.insert(array[i])
+    }
   }
 }
